@@ -1,6 +1,6 @@
 # TransitOps
 
-TransitOps is a Smart Transport Operations Platform inspired by FleetFlow's fleet workflows, rebuilt with a stronger TransitOps foundation.
+TransitOps is a Smart Transport Operations Platform fleet workflows, rebuilt with a stronger TransitOps foundation.
 
 This first feature delivers:
 
