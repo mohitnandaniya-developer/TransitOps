@@ -30,6 +30,26 @@ const roleError = (body, field = "role") => {
   return null;
 };
 
+const VEHICLE_TYPES = ["truck", "mini_truck", "van", "bike"];
+const VEHICLE_STATUSES = ["available", "on_trip", "maintenance", "out_of_service", "retired"];
+
+const positiveNumberError = (body, field, label = field, { required = true, allowZero = false } = {}) => {
+  if (body[field] === undefined || body[field] === null || body[field] === "") {
+    return required ? `${label} is required` : null;
+  }
+
+  const value = Number(body[field]);
+  if (!Number.isFinite(value)) return `${label} must be a number`;
+  if (allowZero ? value < 0 : value <= 0) return `${label} must be ${allowZero ? "zero or greater" : "greater than zero"}`;
+  return null;
+};
+
+const optionError = (body, field, options, label = field, { required = true } = {}) => {
+  if (!isNonEmptyString(body[field])) return required ? `${label} is required` : null;
+  if (!options.includes(body[field])) return `${label} is not supported`;
+  return null;
+};
+
 const collect = (...messages) => messages.filter(Boolean).map((message) => ({ message }));
 
 const validateRegister = (body) => collect(
@@ -68,6 +88,32 @@ const validateUserStatus = (body) => {
   return [];
 };
 
+const validateCreateVehicle = (body) => collect(
+  requiredString(body, "name", "Vehicle name"),
+  optionError(body, "type", VEHICLE_TYPES, "Vehicle type"),
+  requiredString(body, "plate", "Plate"),
+  positiveNumberError(body, "capacityKg", "Capacity"),
+  positiveNumberError(body, "odometerKm", "Odometer", { required: false, allowZero: true }),
+  optionError(body, "status", VEHICLE_STATUSES, "Status", { required: false }),
+  positiveNumberError(body, "pricePerKm", "Price per km", { required: false, allowZero: true }),
+  body.retired !== undefined && typeof body.retired !== "boolean" ? "retired must be a boolean" : null
+);
+
+const validateUpdateVehicle = (body) => collect(
+  body.name !== undefined && !isNonEmptyString(body.name) ? "Vehicle name cannot be empty" : null,
+  body.type !== undefined ? optionError(body, "type", VEHICLE_TYPES, "Vehicle type") : null,
+  body.plate !== undefined && !isNonEmptyString(body.plate) ? "Plate cannot be empty" : null,
+  body.capacityKg !== undefined ? positiveNumberError(body, "capacityKg", "Capacity") : null,
+  body.odometerKm !== undefined ? positiveNumberError(body, "odometerKm", "Odometer", { allowZero: true }) : null,
+  body.status !== undefined ? optionError(body, "status", VEHICLE_STATUSES, "Status") : null,
+  body.pricePerKm !== undefined ? positiveNumberError(body, "pricePerKm", "Price per km", { allowZero: true }) : null,
+  body.retired !== undefined && typeof body.retired !== "boolean" ? "retired must be a boolean" : null
+);
+
+const validateVehicleStatus = (body) => collect(
+  optionError(body, "status", VEHICLE_STATUSES, "Status")
+);
+
 module.exports = {
   EMAIL_REGEX,
   MIN_PASSWORD_LENGTH,
@@ -77,4 +123,7 @@ module.exports = {
   validateCreateUser,
   validateUpdateUser,
   validateUserStatus,
+  validateCreateVehicle,
+  validateUpdateVehicle,
+  validateVehicleStatus,
 };

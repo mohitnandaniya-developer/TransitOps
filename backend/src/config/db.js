@@ -1,13 +1,30 @@
 const { Pool } = require("pg");
 const env = require("./env");
 
-const pool = new Pool({
-  connectionString: env.databaseUrl,
+const baseConfig = {
   max: 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
   ssl: env.dbSsl ? { rejectUnauthorized: false } : false,
-});
+};
+
+const hasDiscreteDbConfig = Boolean(env.dbUser && env.dbHost && env.dbName);
+
+const pool = new Pool(
+  hasDiscreteDbConfig
+    ? {
+      ...baseConfig,
+      user: env.dbUser,
+      host: env.dbHost,
+      database: env.dbName,
+      password: env.dbPassword,
+      port: env.dbPort,
+    }
+    : {
+      ...baseConfig,
+      connectionString: env.databaseUrl,
+    }
+);
 
 pool.on("error", (error) => {
   console.error("Unexpected PostgreSQL pool error", error);
