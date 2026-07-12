@@ -1,0 +1,14 @@
+{
+  "name": "transitops",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TransitOps smart transport operations platform",
+  "scripts": {
+    "backend:migrate": "npm --prefix backend run migrate",
+    "backend:start": "npm --prefix backend start",
+    "backend:verify": "npm --prefix backend run verify:startup",
+    "backend:test:auth": "npm --prefix backend run test:auth",
+    "frontend:dev": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build"
+  }
+}
