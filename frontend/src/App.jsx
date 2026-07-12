@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import LoginPage from "./pages/LoginPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import UserManagement from "./pages/UserManagement";
+import VehicleRegistry from "./pages/VehicleRegistry";
 import { ROLES } from "./utils/roles";
 
 export default function App() {
@@ -16,7 +17,7 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/vehicles" element={<PlaceholderPage pageKey="vehicles" title="Vehicle Registry" />} />
+          <Route path="/vehicles" element={<VehicleRegistry />} />
           <Route path="/drivers" element={<PlaceholderPage pageKey="drivers" title="Driver Profiles" />} />
           <Route path="/trips" element={<PlaceholderPage pageKey="trips" title="Trip Dispatcher" />} />
           <Route path="/maintenance" element={<PlaceholderPage pageKey="maintenance" title="Maintenance Logs" />} />

@@ -8,7 +8,7 @@ const THEME_KEY = "transitops-theme";
 export default function AppLayout() {
   const { user, organization, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [theme, setTheme] = useState(() => localStorage.getItem(THEME_KEY) || "dark");
+  const [theme, setTheme] = useState(() => localStorage.getItem(THEME_KEY) || "light");
   const location = useLocation();
 
   useEffect(() => {
