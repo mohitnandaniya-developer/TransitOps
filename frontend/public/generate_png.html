@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate</title></head>
+<body>
+<svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44" height="44">
+  <rect width="44" height="44" rx="12" fill="#f97316" />
+  <g transform="translate(10, 10)">
+    <rect x="1" y="3" width="15" height="13" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polygon>
+    <circle cx="5.5" cy="18.5" r="2.5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+    <circle cx="18.5" cy="18.5" r="2.5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+  </g>
+</svg>
+<canvas id="canvas" width="44" height="44" style="display:none;"></canvas>
+<textarea id="base64" style="width:100%; height:200px;"></textarea>
+<script>
+  window.onload = () => {
+    const svg = document.getElementById('svg');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const data = new XMLSerializer().serializeToString(svg);
+    const DOMURL = window.URL || window.webkitURL || window;
+    const img = new Image();
+    const svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+    const url = DOMURL.createObjectURL(svgBlob);
+    img.onload = function () {
+      ctx.drawImage(img, 0, 0);
+      DOMURL.revokeObjectURL(url);
+      const b64 = canvas.toDataURL('image/png');
+      document.getElementById('base64').value = b64;
+      document.getElementById('base64').className = 'done';
+    };
+    img.src = url;
+  };
+</script>
+</body>
+</html>
